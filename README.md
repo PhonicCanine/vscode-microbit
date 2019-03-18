@@ -16,13 +16,13 @@ Fetch will get the stub micro:bit module from Github, and Build builds the curre
 
 ## Requirements
 
-###To build
+### To build
 
 * Python 3
     * Pip
         * uflash
 
-###And if you'd like to use the stub library:
+### And if you'd like to use the stub library:
 
 * GIT
 
@@ -32,7 +32,7 @@ Python and Pip must be in your PATH variable. Aside from these three dependencie
 
 The only other important note is that this does *NOT* play nicely with PyLint, so if you would like to use the stub-module (for Intellisense), you'll need to disable pylint on the project.
 
-##Other
+## Other
 
 This extension is also on GitHub: https://github.com/PhonicCanine/vscode-microbit, please file any issues there.
 
