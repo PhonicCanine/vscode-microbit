@@ -6,11 +6,11 @@ Basic support for micro:bit with MicroPython in Visual Studio Code.
 
 Allows code to be compiled onto a micro:bit, and also provides a basic stub of the micro:bit library, so that you can take advantage of Visual Studio Code's features, like Intellisense.
 
-\!\[intellisense support\]\(images/img1.jpg\)
+\!\[intellisense support\]\(https://github.com/PhonicCanine/vscode-microbit/blob/master/images/img1.jpg?raw=true\)
 
 Adds two commands to Visual Studio Code: Fetch and Build,
 
-\!\[commands\]\(images/img2.jpg\)
+\!\[commands\]\(https://github.com/PhonicCanine/vscode-microbit/blob/master/images/img2.jpg?raw=true\)
 
 Fetch will get the stub micro:bit module from Github, and Build builds the current file to your micro:bit. Build uses Control + F5 by default on Windows, and Command + F5 on MacOS, but may also be accessed from the title bar, when editing python programs.
 
