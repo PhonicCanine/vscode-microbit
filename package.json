@@ -2,10 +2,20 @@
 	"name": "micro-bit",
 	"displayName": "micro:bit",
 	"description": "Microbit MicroPython functionality for Visual Studio Code",
-	"version": "0.0.1",
-	"author": {"url": "https://github.com/PhonicCanine/", "email": "joseph.fergusson@outlook.com.au", "name": "Joseph Fergusson"},
-	"repository": {"type": "Git", "url": "https://github.com/PhonicCanine/vscode-microbit"},
-	"extensionPack": ["ms-python.python"],
+	"version": "0.1.1",
+	"author": {
+		"url": "https://github.com/PhonicCanine/",
+		"email": "joseph.fergusson@outlook.com.au",
+		"name": "Joseph Fergusson"
+	},
+	"publisher": "PhonicCanine",
+	"repository": {
+		"type": "Git",
+		"url": "https://github.com/PhonicCanine/vscode-microbit"
+	},
+	"extensionDependencies": [
+		"ms-python.python"
+	],
 	"engines": {
 		"vscode": "^1.32.0"
 	},
@@ -30,21 +40,31 @@
 				"title": "Fetch micro:bit modules"
 			}
 		],
-		"keybindings": [{
-			"command": "extension.build",
-			"key": "ctrl+f5",
-			"mac": "cmd+f5",
-			"when": "editorTextFocus"
-		}],
-		"menus": {
-			"editor/title": [{
-				"when": "resourceLangId == python",
+		"keybindings": [
+			{
 				"command": "extension.build",
-				"group": "navigation"
-			}]}
+				"key": "ctrl+f5",
+				"mac": "cmd+f5",
+				"when": "editorTextFocus"
+			}
+		],
+		"menus": {
+			"editor/title": [
+				{
+					"when": "resourceLangId == python",
+					"command": "extension.build",
+					"group": "navigation"
+				}
+			]
+		}
 	},
 	"preview": true,
-	"keywords": ["micro:bit","micropython","python","MicroBit"],
+	"keywords": [
+		"micro:bit",
+		"micropython",
+		"python",
+		"MicroBit"
+	],
 	"scripts": {
 		"postinstall": "node ./node_modules/vscode/bin/install",
 		"test": "node ./node_modules/vscode/bin/test"
