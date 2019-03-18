@@ -1,0 +1,59 @@
+{
+	"name": "micro-bit",
+	"displayName": "micro:bit",
+	"description": "Microbit MicroPython functionality for Visual Studio Code",
+	"version": "0.0.1",
+	"author": {"url": "https://github.com/PhonicCanine/", "email": "joseph.fergusson@outlook.com.au", "name": "Joseph Fergusson"},
+	"repository": {"type": "Git", "url": "https://github.com/PhonicCanine/vscode-microbit"},
+	"extensionPack": ["ms-python.python"],
+	"engines": {
+		"vscode": "^1.32.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"activationEvents": [
+		"onCommand:extension.build",
+		"onCommand:extension.get",
+		"onLanguage:python",
+		"onDebug"
+	],
+	"main": "./extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.build",
+				"title": "Build current file to Micro:Bit"
+			},
+			{
+				"command": "extension.get",
+				"title": "Fetch micro:bit modules"
+			}
+		],
+		"keybindings": [{
+			"command": "extension.build",
+			"key": "ctrl+f5",
+			"mac": "cmd+f5",
+			"when": "editorTextFocus"
+		}],
+		"menus": {
+			"editor/title": [{
+				"when": "resourceLangId == python",
+				"command": "extension.build",
+				"group": "navigation"
+			}]}
+	},
+	"preview": true,
+	"keywords": ["micro:bit","micropython","python","MicroBit"],
+	"scripts": {
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"typescript": "^3.3.1",
+		"vscode": "^1.1.28",
+		"eslint": "^5.13.0",
+		"@types/node": "^10.12.21",
+		"@types/mocha": "^2.2.42"
+	}
+}
