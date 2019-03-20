@@ -30,7 +30,9 @@ It may also be found here, though: https://github.com/PhonicCanine/microbit
 
 Python and Pip must be in your PATH variable. Aside from these three dependencies everything else should work for compiling.
 
-The only other important note is that this does *NOT* play nicely with PyLint, so if you would like to use the stub-module (for Intellisense), you'll need to disable pylint on the project.
+### A note about directory naming:
+
+Please note that if you plan on using the "Fetch microbit modules" command, and you have a folder inside your workspace named "microbit", it will be deleted!
 
 ## Other
 
@@ -38,7 +40,13 @@ This extension is also on GitHub: https://github.com/PhonicCanine/vscode-microbi
 
 Thank you.
 
-### 1.0.0
+### 0.1.0
 
 Initial release
 -----------------------------------------------------------------------------------------------------------
+
+### 0.2.0
+
+Extension is now compatible with PyLint.
+Extension now allows fetching modules even if the root project folder is named "microbit"
+

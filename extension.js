@@ -69,41 +69,11 @@ function activate(context) {
 		if (openFolders.length == 0){
 			vscode.window.showErrorMessage("Please open a folder before importing the micro:bit module")
 		}else{
-			var uri = openFolders[0].uri;
-			var alreadyHasFolder = -1;
-			for (var i = 0; i < openFolders.length; i++){
-				if (openFolders[i].name == "microbit"){
-					alreadyHasFolder = i;
-				}
-			}
-
-			if (alreadyHasFolder != -1){
-				
-				var conformanceList = ["__init__.py","accelerometer.py","compass.py","display.py","i2c.py","Image.py","spi.py","uart.py"];
-				var hit = 0;
-				vscode.workspace.findFiles("microbit/*.py").then(function(uris){
-					for (var i = 0; i < conformanceList.length; i++){
-						for (var j = 0; j < uris.length; j++){
-							if (uris[j].fsPath.indexOf(conformanceList[i]) > -1){
-								hit++;
-							}
-						}
-					}
-
-					if (hit >= conformanceList.length){
-						vscode.window.showInformationMessage("You already have the required module")
-					}else{
-						vscode.window.showErrorMessage("Please delete the contents of the microbit folder (" + openFolders[alreadyHasFolder] + "), before trying this again.")
-					}
-
-				},
-				function(){
-					vscode.window.showErrorMessage("Could not check for microbit files for some reason.")
-				});
-				
-			}else{
-				t.sendText("git clone https://github.com/PhonicCanine/microbit.git")
-			}
+			
+			t.sendText("rm -rf microbit")
+			t.sendText("rd /s /q microbit")
+			t.sendText("git clone https://github.com/PhonicCanine/microbit.git")
+			
 		}
 
 	}

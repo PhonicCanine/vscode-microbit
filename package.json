@@ -2,7 +2,7 @@
 	"name": "micro-bit",
 	"displayName": "micro:bit",
 	"description": "Microbit MicroPython functionality for Visual Studio Code",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"author": {
 		"url": "https://github.com/PhonicCanine/",
 		"email": "joseph.fergusson@outlook.com.au",
