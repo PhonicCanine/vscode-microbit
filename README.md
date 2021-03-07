@@ -50,3 +50,14 @@ Initial release
 Extension is now compatible with PyLint.
 Extension now allows fetching modules even if the root project folder is named "microbit"
 
+-----------------------------------------------------------------------------------------------------------
+
+### 0.3.0
+
+Extension will now fallback to `python3 -m uflash` if `uflash` does not work (on some Windows setups this will fix issues with the build button).
+
+#### Added commands allowing the microbit filesystem to be interacted with:
+
+`Put this file onto the attached micro:bit` will use `ufs put` to place the currently open file onto the microbit's filesystem (to use this, you'll need to install `microfs` (`pip install microfs`)).
+
+`Clear files on the attached micro:bit` will clear all files stored on the microbit's filesystem.
