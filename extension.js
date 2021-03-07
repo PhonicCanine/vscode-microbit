@@ -12,6 +12,7 @@ function activate(context) {
 
 	let output = vscode.window.createOutputChannel("MicroBuild");
 	let defaultFallbackBuild = false;
+	const enforceOutput = false;
 	function buildCurrentDocument(){
 
 		console.log(vscode.window.activeTextEditor.document.fileName);
@@ -63,7 +64,7 @@ function activate(context) {
 
 	let buildCommand = vscode.commands.registerCommand('extension.build', function () {
 		buildCurrentDocument();
-		output.show(true);
+		if (enforceOutput) output.show(true);
 	});
 
 	function fetchMicrobitModule(){
@@ -160,7 +161,7 @@ function activate(context) {
 
 	let putCommand = vscode.commands.registerCommand('extension.put', function(){
 		ufsPutCommand();
-		output.show(true);
+		if (enforceOutput) output.show(true);
 	});
 
 	function ufsRm(filename){
@@ -262,7 +263,7 @@ function activate(context) {
 
 	let clearCommand = vscode.commands.registerCommand('extension.clear', function(){
 		ufsClear();
-		output.show(true);
+		if (enforceOutput) output.show(true);
 	});
 
 	context.subscriptions.push(buildCommand);
