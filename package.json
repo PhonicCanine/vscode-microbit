@@ -25,6 +25,8 @@
 	"activationEvents": [
 		"onCommand:extension.build",
 		"onCommand:extension.get",
+		"onCommand:extension.put",
+		"onCommand:extension.clear",
 		"onLanguage:python",
 		"onDebug"
 	],
@@ -38,6 +40,18 @@
 			{
 				"command": "extension.get",
 				"title": "Fetch micro:bit modules"
+			},
+			{
+				"command": "extension.put",
+				"title": "Copy this file onto the attached micro:bit"
+			},
+			{
+				"command": "extension.put",
+				"title": "Put this file onto the attached micro:bit"
+			},
+			{
+				"command": "extension.clear",
+				"title": "Clear files on the attached micro:bit"
 			}
 		],
 		"keybindings": [
@@ -75,5 +89,10 @@
 		"eslint": "^5.13.0",
 		"@types/node": "^10.12.21",
 		"@types/mocha": "^2.2.42"
+	},
+	"dependencies": {
+		"child_process": "^1.0.2",
+		"exec": "^0.2.1",
+		"rimraf": "^3.0.2"
 	}
 }
