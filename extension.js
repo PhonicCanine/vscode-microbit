@@ -11,55 +11,58 @@ const rimraf = require("rimraf");
 function activate(context) {
 
 	let output = vscode.window.createOutputChannel("MicroBuild");
-	let defaultFallbackBuild = false;
+	let defaultBuildMode = 0;
 	const enforceOutput = false;
-	function buildCurrentDocument(){
+	const executeOrder = ["","python3 -m ","python -m "];
 
-		console.log(vscode.window.activeTextEditor.document.fileName);
-
-		function python3Func() {
-			child_process.exec("python3 -m uflash \"" + vscode.window.activeTextEditor.document.fileName + "\"", (error, stdout, stderr) => {
+	function tryExecuteCommand(command, success, idx = -1) {
+		if (idx === -1) {
+			tryExecuteCommand(command,success,defaultBuildMode);
+			return;
+		}
+		console.log(`Trying command ${command} with ${executeOrder[idx]}`);
+		child_process.exec(`${executeOrder[idx]}${command}`,(error, stdout, stderr) => {
 			
-				if (error) {
-					console.log();
-					output.appendLine(`error: ${error.message}.`);
-					return;
+			if (error) {
+				if (idx + 1 < executeOrder.length) {
+					output.appendLine(`error: ${error.message}. Attempting same command with ${executeOrder[idx]}`);
+					tryExecuteCommand(command, success, idx + 1);
+				} else {
+					output.appendLine(`error: ${error.message}. No more ways to try.`);
 				}
-				if (stderr) {
-					output.appendLine(`error: ${error.message}.`);
-					return;
+				return;
+			}
+			if (stderr) {
+				if (idx + 1 < executeOrder.length) {
+					output.appendLine(`error: ${error.message}. Attempting same command with ${executeOrder[idx]}`);
+					tryExecuteCommand(command, success, idx + 1);
+				} else {
+					output.appendLine(`error: ${error.message}. No more ways to try.`);
 				}
-				if (!(error || stderr)) {
-					output.appendLine(stdout);
-					output.appendLine("Successfully built to Microbit");
-					defaultFallbackBuild = true;
-				}
-			});
-		}
+				return;
+			}
+			if (!(error || stderr)) {
+				output.appendLine(stdout);
+				success(stdout);
+				defaultBuildMode = idx;
+			}
+		});
+	}
 
-		if (!defaultFallbackBuild) {
-			child_process.exec("uflash \"" + vscode.window.activeTextEditor.document.fileName + "\"", (error, stdout, stderr) => {
-				
-				if (error) {
-					console.log();
-					output.appendLine(`error: ${error.message}. Trying again with Python3.`);
-					python3Func();
-					return;
-				}
-				if (stderr) {
-					output.appendLine(`error: ${error.message}. Trying again with Python3.`);
-					python3Func();
-					return;
-				}
-				if (!(error || stderr)) {
-					output.appendLine(stdout);
-					output.appendLine("Successfully built to Microbit");
-				}
-			});
-		} else {
-			python3Func();
+	function checkPython() {
+		const fn = vscode.window.activeTextEditor.document.fileName;
+		if (!fn.endsWith(".py")) {
+			vscode.window.showErrorMessage(`Error: the current document (${fn}) is not a Python file. Please make sure the cursor is in an active Python file, before trying that command again.`)
+			return false;
 		}
-		
+		return true;
+	}
+
+	function buildCurrentDocument(){
+		if (!checkPython()) return;
+		tryExecuteCommand("uflash \"" + vscode.window.activeTextEditor.document.fileName + "\"",(x) => {
+			output.appendLine("Successfully built to Microbit");
+		});
 	}
 
 	let buildCommand = vscode.commands.registerCommand('extension.build', function () {
@@ -114,49 +117,10 @@ function activate(context) {
 
 	function ufsPutCommand(){
 		console.log(vscode.window.activeTextEditor.document.fileName);
-
-		function python3Func() {
-			child_process.exec("python3 -m ufs put \"" + vscode.window.activeTextEditor.document.fileName + "\"", (error, stdout, stderr) => {
-			
-				if (error) {
-					console.log();
-					output.appendLine(`error: ${error.message}.`);
-					return;
-				}
-				if (stderr) {
-					output.appendLine(`error: ${error.message}.`);
-					return;
-				}
-				if (!(error || stderr)) {
-					output.appendLine(stdout);
-					output.appendLine("Successfully copied to Microbit");
-					defaultFallbackBuild = true;
-				}
-			});
-		}
-
-		if (!defaultFallbackBuild) {
-			child_process.exec("ufs put \"" + vscode.window.activeTextEditor.document.fileName + "\"", (error, stdout, stderr) => {
-				
-				if (error) {
-					console.log();
-					output.appendLine(`error: ${error.message}. Trying again with Python3.`);
-					python3Func();
-					return;
-				}
-				if (stderr) {
-					output.appendLine(`error: ${error.message}. Trying again with Python3.`);
-					python3Func();
-					return;
-				}
-				if (!(error || stderr)) {
-					output.appendLine(stdout);
-					output.appendLine("Successfully copied to Microbit");
-				}
-			});
-		} else {
-			python3Func();
-		}
+		if (!checkPython()) return;
+		tryExecuteCommand("ufs put \"" + vscode.window.activeTextEditor.document.fileName + "\"",(x) => {
+			output.appendLine("Successfully copied to Microbit");
+		});
 	}
 
 	let putCommand = vscode.commands.registerCommand('extension.put', function(){
@@ -167,47 +131,9 @@ function activate(context) {
 	function ufsRm(filename){
 		if (filename == "")
 			return;
-
-		function python3Func() {
-			child_process.exec("python3 -m ufs rm " + filename, (error, stdout, stderr) => {
-			
-				if (error) {
-					console.log();
-					output.appendLine(`error: ${error.message}.`);
-					return;
-				}
-				if (stderr) {
-					output.appendLine(`error: ${error.message}.`);
-					return;
-				}
-				if (!(error || stderr)) {
-					defaultFallbackBuild = true;
-					output.appendLine(`Deleted ${filename}`);
-				}
-			});
-		}
-
-		if (!defaultFallbackBuild) {
-			child_process.exec("ufs rm " + filename, (error, stdout, stderr) => {
-				
-				if (error) {
-					console.log();
-					output.appendLine(`error: ${error.message}. Trying again with Python3.`);
-					python3Func();
-					return;
-				}
-				if (stderr) {
-					output.appendLine(`error: ${error.message}. Trying again with Python3.`);
-					python3Func();
-					return;
-				}
-				if (!(error || stderr)) {
-					output.appendLine(`Deleted ${filename}`);
-				}
-			});
-		} else {
-			python3Func();
-		}
+		tryExecuteCommand("ufs rm " + filename,() => {
+			output.appendLine(`Deleted ${filename}`);
+		});
 	}
 
 	function ufsRemoveFiles(files) {
@@ -219,46 +145,10 @@ function activate(context) {
 	}
 
 	function ufsClear(){
-		function python3Func() {
-			child_process.exec("python3 -m ufs ls", (error, stdout, stderr) => {
-			
-				if (error) {
-					console.log();
-					output.appendLine(`error: ${error.message}.`);
-					return;
-				}
-				if (stderr) {
-					output.appendLine(`error: ${error.message}.`);
-					return;
-				}
-				if (!(error || stderr)) {
-					defaultFallbackBuild = true;
-					ufsRemoveFiles(stdout);
-				}
-			});
-		}
-
-		if (!defaultFallbackBuild) {
-			child_process.exec("ufs ls", (error, stdout, stderr) => {
-				
-				if (error) {
-					console.log();
-					output.appendLine(`error: ${error.message}. Trying again with Python3.`);
-					python3Func();
-					return;
-				}
-				if (stderr) {
-					output.appendLine(`error: ${error.message}. Trying again with Python3.`);
-					python3Func();
-					return;
-				}
-				if (!(error || stderr)) {
-					ufsRemoveFiles(stdout);
-				}
-			});
-		} else {
-			python3Func();
-		}
+		tryExecuteCommand("ufs ls",(x) => {
+			output.appendLine(`Found files:\n ${x}`);
+			ufsRemoveFiles(x);
+		});
 	}
 
 	let clearCommand = vscode.commands.registerCommand('extension.clear', function(){
